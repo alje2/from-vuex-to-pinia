@@ -1,7 +1,16 @@
 <script>
-import { v4 as uuidv4 } from 'uuid'
-
+import { v4 as uuidv4 } from 'uuid';
+import { useEventStore } from '../stores/Event';
+import { useUserStore } from '../stores/User';
 export default {
+  setup() {
+    const userStore = useUserStore();
+    const eventStore = useEventStore();
+    return {
+      userStore,
+      eventStore,
+    };
+  },
   data() {
     return {
       categories: [
@@ -11,7 +20,7 @@ export default {
         'housing',
         'education',
         'food',
-        'community'
+        'community',
       ],
       event: {
         id: '',
@@ -21,34 +30,34 @@ export default {
         location: '',
         date: '',
         time: '',
-        organizer: ''
-      }
-    }
+        organizer: '',
+      },
+    };
   },
   methods: {
     onSubmit() {
       const event = {
         ...this.event,
         id: uuidv4(),
-        organizer: this.$store.state.user
-      }
-      this.$store
-        .dispatch('createEvent', event)
+        organizer: this.userStore.user,
+      };
+      this.eventStore
+        .createEvent(event)
         .then(() => {
           this.$router.push({
             name: 'EventDetails',
-            params: { id: event.id }
-          })
+            params: { id: event.id },
+          });
         })
-        .catch(error => {
+        .catch((error) => {
           this.$router.push({
             name: 'ErrorDisplay',
-            params: { error: error }
-          })
-        })
-    }
-  }
-}
+            params: { error: error },
+          });
+        });
+    },
+  },
+};
 </script>
 
 <template>

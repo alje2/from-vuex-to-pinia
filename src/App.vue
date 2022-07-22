@@ -1,3 +1,14 @@
+<script>
+import { useUserStore } from './stores/User';
+export default {
+  setup() {
+    const userStore = useUserStore();
+    return {
+      userStore,
+    };
+  },
+};
+</script>
 <template>
   <div id="app">
     <div id="nav">
@@ -6,6 +17,7 @@
       |
       <router-link :to="{ name: 'EventCreate' }">Create Event</router-link>
     </div>
+    {{ userStore.user }}
     <router-view />
   </div>
 </template>
